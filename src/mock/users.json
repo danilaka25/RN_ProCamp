@@ -1,0 +1,319 @@
+// https://randomuser.me/api/?results=10
+// fake.paragraph(nb_sentences=10)
+
+{
+  "results": [
+    {
+      "id": 1,
+      "age": 23,
+      "gender": "male",
+      "name": {
+
+        "first": "Jackson",
+        "last": "Green"
+      },
+      "location": {
+        "street": {
+          "number": 7320,
+          "name": "East Tamaki Road"
+        },
+        "city": "Greymouth",
+        "state": "Wellington",
+        "country": "New Zealand",
+        "postcode": 19961,
+        "coordinates": {
+          "latitude": "61.9071",
+          "longitude": "-163.4895"
+        }
+      },
+      "email": "jackson.green@example.com",
+      "phone": "(693)-999-9279",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/men/60.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/men/60.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/men/60.jpg"
+      },
+      "bio": "American whole magazine truth stop whose. On traditional measure example sense peace. Would mouth relate own chair. Role together range line. Government first policy daughter."
+    },
+    {
+      "id": 2,
+      "age": 22,
+      "gender": "male",
+      "name": {
+
+        "first": "Vilho",
+        "last": "Niemi"
+      },
+      "location": {
+        "street": {
+          "number": 2907,
+          "name": "Rautatienkatu"
+        },
+        "city": "Raisio",
+        "state": "Lapland",
+        "country": "Finland",
+        "postcode": 37845,
+        "coordinates": {
+          "latitude": "39.9728",
+          "longitude": "144.1707"
+        }
+      },
+      "email": "vilho.niemi@example.com",
+      "phone": "04-899-997",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/men/41.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/men/41.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/men/41.jpg"
+      },
+      "bio": "Kind miss artist truth trouble behavior style. Ability management test during foot that course nothing. Sound central myself before year. Your majority feeling fact by four two. White owner onto knowledge other. First drug contain start almost wonder."
+    },
+    {
+      "id": 3,
+      "age": 23,
+      "gender": "female",
+      "name": {
+        "first": "Jasmine",
+        "last": "Wang"
+      },
+      "location": {
+        "street": {
+          "number": 4292,
+          "name": "Botany Road"
+        },
+        "city": "Gisborne",
+        "state": "Hawke'S Bay",
+        "country": "New Zealand",
+        "postcode": 68082,
+        "coordinates": {
+          "latitude": "77.6269",
+          "longitude": "174.0801"
+        }
+      },
+      "email": "jasmine.wang@example.com",
+      "phone": "(952)-692-2197",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/78.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/78.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/78.jpg"
+      },
+      "bio": "Attorney quickly candidate change although bag record. Raise study modern miss dog Democrat quickly. Often late produce you true soldier. Food break onto friend."
+    },
+    {
+      "id": 4,
+      "age": 20,
+      "gender": "female",
+      "name": {
+        "first": "Luzia",
+        "last": "Türk"
+      },
+      "location": {
+        "street": {
+          "number": 327,
+          "name": "Mühlenstraße"
+        },
+        "city": "Rüthen",
+        "state": "Baden-Württemberg",
+        "country": "Germany",
+        "postcode": 34638,
+        "coordinates": {
+          "latitude": "-0.2048",
+          "longitude": "26.2242"
+        }
+      },
+      "email": "luzia.turk@example.com",
+      "phone": "0731-3399170",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/67.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/67.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/67.jpg"
+      },
+      "bio": "Administration even relate head color. Staff beyond chair recently and off. Own available buy country store build before. Already against which continue."
+    },
+    {
+      "id": 5,
+      "age": 19,
+      "gender": "female",
+      "name": {
+        "first": "Cathy",
+        "last": "Smythe"
+      },
+      "location": {
+        "street": {
+          "number": 8596,
+          "name": "Albert Road"
+        },
+        "city": "Cork",
+        "state": "Meath",
+        "country": "Ireland",
+        "postcode": 55040,
+        "coordinates": {
+          "latitude": "-51.4657",
+          "longitude": "135.8553"
+        }
+      },
+      "email": "cathy.smythe@example.com",
+      "phone": "021-871-3746",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/24.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/24.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/24.jpg"
+      },
+      "bio": "Decision song view age international big employee. Author feeling job article level. Beyond write current grow rule stuff truth college."
+    },
+    {
+      "id": 6,
+      "age": 18,
+      "gender": "female",
+      "name": {
+        "first": "Flora",
+        "last": "Fabre"
+      },
+      "location": {
+        "street": {
+          "number": 6570,
+          "name": "Rue Dubois"
+        },
+        "city": "Mulhouse",
+        "state": "Ardennes",
+        "country": "France",
+        "postcode": 25091,
+        "coordinates": {
+          "latitude": "87.3976",
+          "longitude": "167.5858"
+        }
+      },
+      "email": "flora.fabre@example.com",
+      "phone": "04-09-54-82-99",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/42.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/42.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/42.jpg"
+      },
+      "bio": "Serious inside else memory if six. Whose group through despite cause. Sense peace economy travel. Total financial role together range line beyond its. Policy daughter need kind miss artist truth trouble."
+    },
+    {
+      "id": 7,
+      "age": 21,
+      "gender": "male",
+      "name": {
+        "first": "Ali",
+        "last": "Sepetçi"
+      },
+      "location": {
+        "street": {
+          "number": 6433,
+          "name": "Doktorlar Cd"
+        },
+        "city": "Tekirdağ",
+        "state": "Isparta",
+        "country": "Turkey",
+        "postcode": 35316,
+        "coordinates": {
+          "latitude": "-9.0299",
+          "longitude": "132.6245"
+        }
+      },
+      "email": "ali.sepetci@example.com",
+      "phone": "(997)-564-7397",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/men/82.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/men/82.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/men/82.jpg"
+      },
+      "bio": "Rest human station property. Partner stock four. Region as true develop sound central. Language ball floor meet usually board necessary. Natural sport music white."
+    },
+    {
+      "id": 8,
+      "age": 25,
+      "gender": "male",
+      "name": {
+        "first": "حامد",
+        "last": "احمدی"
+      },
+      "location": {
+        "street": {
+          "number": 6943,
+          "name": "کارگر شمالی"
+        },
+        "city": "کاشان",
+        "state": "اصفهان",
+        "country": "Iran",
+        "postcode": 65766,
+        "coordinates": {
+          "latitude": "49.5500",
+          "longitude": "56.5387"
+        }
+      },
+      "email": "hmd.hmdy@example.com",
+      "phone": "065-83274170",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/men/31.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/men/31.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/men/31.jpg"
+      },
+      "bio": "Natural explain before something first drug contain start. Party prevent live. Quickly candidate change although. Together type music hospital. Every speech support time operation wear often."
+    },
+    {
+      "id": 9,
+      "age": 24,
+      "gender": "female",
+      "name": {
+        "first": "Lindaura",
+        "last": "Lima"
+      },
+      "location": {
+        "street": {
+          "number": 4432,
+          "name": "Travessa dos Açorianos"
+        },
+        "city": "Parnamirim",
+        "state": "Roraima",
+        "country": "Brazil",
+        "postcode": 54084,
+        "coordinates": {
+          "latitude": "-32.7986",
+          "longitude": "127.7179"
+        }
+      },
+      "email": "lindaura.lima@example.com",
+      "phone": "(90) 2924-2360",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/women/37.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/women/37.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/women/37.jpg"
+      },
+      "bio": "Manage political record word group food break. Picture suddenly drug rule bring determine some forward. Beyond chair recently and. Plant view own available buy country store. Hospital have wonder already."
+    },
+    {
+      "id": 10,
+      "age": 22,
+      "gender": "male",
+      "name": {
+        "first": "Simon",
+        "last": "Chow"
+      },
+      "location": {
+        "street": {
+          "number": 5041,
+          "name": "Alfred St"
+        },
+        "city": "St. George",
+        "state": "Yukon",
+        "country": "Canada",
+        "postcode": "N2N 1Y2",
+        "coordinates": {
+          "latitude": "-75.0433",
+          "longitude": "21.5168"
+        }
+      },
+      "email": "simon.chow@example.com",
+      "phone": "148-036-4255",
+      "picture": {
+        "large": "https://randomuser.me/api/portraits/men/26.jpg",
+        "medium": "https://randomuser.me/api/portraits/med/men/26.jpg",
+        "thumbnail": "https://randomuser.me/api/portraits/thumb/men/26.jpg"
+      },
+      "bio": "Create wife responsibility. Decision song view age international big employee. Author feeling job article level. Beyond write current grow rule stuff truth college. Whom around put suddenly garden."
+    }
+  ]
+}
