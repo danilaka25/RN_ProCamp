@@ -28,12 +28,21 @@ Mpre details about [GlobalLogic](https://styled-components.com/) and [ReactNativ
 | Name | Comments | Status |
 | - | ----------- | --- |
 | Init project    | Init project with `expo-cli` and create a repository on `github`                 | ✅  |
-| File structure  | Create basic folder and file structure. `src` with all needed directories        | ✅ ❌ |
-| Instal helpers  | Install and config `linter`, ....                                                | ❌ |
+| File structure  | Create basic folder and file structure. `src` with all needed directories        | ✅ ✅  |
+| Instal helpers  | Install and config `linter`, ....                                                | ✅ |
 | Find UI         | [Home Page](https://dribbble.com/shots/14489959-Love-Dating), [Chat Page](https://dribbble.com/shots/14496755-Chat-Messages) | ✅ ❌ |
 | Develop Screens | TBD by Andrii  and Hanna                                                         | ❌ |
-| Develop Stores  | TBD by Artem                                                                     | ❌ |
-| Develop Navigation | TBD by Artem                                                                  | ❌ |
+| Develop Stores  | TBD by Artem                                                                     | ✅ |
+| Develop Navigation | TBD by Artem                                                                  | ✅ |
 
 
+## Reviews
 
+During reviews it's better to follow some rules in order to simplify the process:
+* You are splitted into teams. If your team member is asing for review -- please take a look. If this person is not from your team -- it would be cool to do review as well, but only if you have some spare time.
+* During reviews use only English (because in general that is the language you are gonna do reviews in future).
+* If you leave a comment and request some change -- make sure that you can describe how this change will improve the application (performance, developer experience, readability, etc). The best case is if this rule is defined in ESlint/project set of rules or you have a link to some resource (like article) that confirms your suggestion.
+* Please don't postpone the work too much. In order to merge your next feature, you usually have ~1 week (which includes developing, reviewing, testing).
+* If you faced a situation when you cannot resolve the PR comment (reviewer and author cannot find a solution which satisfies both) -- please ask trainers for help in common channel.
+* Obvious, but important thing: be respectful during the review, remember that it's only about code, but not about you personally. 
+* If you want to read more about how to prepare for review & be good reviewer -- check [10 Principles of a Good Code Review](https://dev.to/codemouse92/10-principles-of-a-good-code-review-2eg), [Code review best practices](https://tsh.io/blog/code-review-best-practices/)

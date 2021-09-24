@@ -2,13 +2,27 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Button, StyleSheet } from 'react-native';
 
-import { Text, View } from '../../../components/Themed';
-import Routes from '../../../navigation/routes';
+import { Text, View } from '../../components/Themed';
+import Routes from '../../config/navigation/routes';
+import { useAppDispatch } from '../../hooks/navigation';
+import mockedUsers from '../../mock/users.json';
+import { userActions } from '../profile/redux';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const defaultUser = mockedUsers.results[0];
 
-  const openTabs = () => navigation.dispatch(StackActions.replace(Routes.root.main, { screen: Routes.swiper.main }));
+  const openTabs = () => {
+    dispatch(userActions.setInitialUser({
+      id: defaultUser.id,
+      age: defaultUser.age,
+      name: defaultUser.name.first,
+      surname: defaultUser.name.last,
+    }));
+
+    navigation.dispatch(StackActions.replace(Routes.tabs));
+  };
 
   return (
     <View style={styles.container}>

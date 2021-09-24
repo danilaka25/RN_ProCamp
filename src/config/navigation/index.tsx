@@ -9,11 +9,11 @@ import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 import Routes from './routes';
 
-import NotFoundScreen from '../modules/notFound';
-import { RootStackParamList } from '../../types';
+import NotFoundScreen from '../../modules/notFound';
+import { RootStackParamList } from '../../../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
-import LoginScreen from '../modules/authentication/screens/Login';
+import LoginScreen from '../../modules/login';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -31,10 +31,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.authentication.login}>
-      <Stack.Screen name={Routes.authentication.login} component={LoginScreen} />
-      <Stack.Screen name={Routes.root.main} component={BottomTabNavigator} />
-      <Stack.Screen name={Routes.root.notFound} component={NotFoundScreen} options={{ title: 'Oops!' }} />
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.login}>
+      <Stack.Screen name={Routes.login} component={LoginScreen} />
+      <Stack.Screen name={Routes.tabs} component={BottomTabNavigator} />
+      <Stack.Screen name={Routes.notFound} component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
 }

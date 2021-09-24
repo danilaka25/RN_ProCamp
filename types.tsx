@@ -3,11 +3,10 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import Routes from './src/navigation/routes';
+import Routes from './src/config/navigation/routes';
 
 const rootStack = {
-  [Routes.root.main]: undefined,
-  [Routes.root.notFound]: undefined,
+  [typeof Routes]: undefined,
 } as const;
 
 export type RootStackParamList = typeof rootStack;

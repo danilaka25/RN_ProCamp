@@ -37,6 +37,7 @@ module.exports = {
       'error',
       'always'
     ],
-    'react/display-name': [0]
+    'react/display-name': [0],
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   }
 };

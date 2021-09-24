@@ -7,12 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import SwiperTab from './tabs/Swiper';
+import Colors from '../../constants/Colors';
+import useColorScheme from '../../hooks/useColorScheme';
 import Routes from './routes';
-import ChatTab from './tabs/Chat';
-import ProfileTab from './tabs/Profile';
+import SwiperScreen from '../../modules/swiper';
+import ChatScreen from '../../modules/chat';
+import ProfileScreen from '../../modules/profile';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -28,26 +28,26 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName={Routes.swiper.main}
+      initialRouteName={Routes.tabs}
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name={Routes.swiper.main}
-        component={SwiperTab}
+        name={Routes.swiper}
+        component={SwiperScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="copy-outline" />,
         }}
       />
       <BottomTab.Screen
-        name={Routes.chat.main}
-        component={ChatTab}
+        name={Routes.chat}
+        component={ChatScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="chatbubbles-outline" />,
         }}
       />
       <BottomTab.Screen
-        name={Routes.profile.main}
-        component={ProfileTab}
+        name={Routes.profile}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
         }}
