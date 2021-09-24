@@ -39,7 +39,7 @@ Mpre details about [GlobalLogic](https://styled-components.com/) and [ReactNativ
 ## Reviews
 
 During reviews it's better to follow some rules in order to simplify the process:
-* You are splitted into teams. If your team member is asing for review -- please take a look. If this person is not from your team -- it would be cool to do review as well, but only if you have some spare time.
+* You are splitted into teams. If your team member is asking for review -- please take a look. If this person is not from your team -- it would be cool to do review as well, but only if you have some spare time.
 * During reviews use only English (because in general that is the language you are gonna do reviews in future).
 * If you leave a comment and request some change -- make sure that you can describe how this change will improve the application (performance, developer experience, readability, etc). The best case is if this rule is defined in ESlint/project set of rules or you have a link to some resource (like article) that confirms your suggestion.
 * Please don't postpone the work too much. In order to merge your next feature, you usually have ~1 week (which includes developing, reviewing, testing).
