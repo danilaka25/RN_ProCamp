@@ -22,20 +22,6 @@ Mpre details about [GlobalLogic](https://styled-components.com/) and [ReactNativ
 * procceed the [instructions](https://docs.expo.dev/get-started/create-a-new-app/) 
 
 
-
-## TODO list
-
-| Name | Comments | Status |
-| - | ----------- | --- |
-| Init project    | Init project with `expo-cli` and create a repository on `github`                 | ✅  |
-| File structure  | Create basic folder and file structure. `src` with all needed directories        | ✅ ✅  |
-| Instal helpers  | Install and config `linter`, ....                                                | ✅ |
-| Find UI         | [Home Page](https://dribbble.com/shots/14489959-Love-Dating), [Chat Page](https://dribbble.com/shots/14496755-Chat-Messages) | ✅ ❌ |
-| Develop Screens | TBD by Andrii  and Hanna                                                         | ❌ |
-| Develop Stores  | TBD by Artem                                                                     | ✅ |
-| Develop Navigation | TBD by Artem                                                                  | ✅ |
-
-
 ## Reviews
 
 During reviews it's better to follow some rules in order to simplify the process:
