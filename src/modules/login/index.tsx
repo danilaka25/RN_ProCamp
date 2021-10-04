@@ -49,14 +49,7 @@ export default function LoginScreen() {
 
   }
 
-  const onButtonPressOut = () =>{
-    console.log("out");
-    clearInterval(timer);
-  }
-
-
   return (
-
 
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <SafeAreaView style={styles.container}>
