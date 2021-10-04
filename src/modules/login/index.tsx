@@ -1,87 +1,122 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
-import * as React from 'react';
-import { Button, StyleSheet, TextInput } from 'react-native';
-
+import React, { useState, useEffect } from "react";
+import { Alert, StyleSheet, TextInput, Pressable, SafeAreaView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard, TouchableOpacity } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import Routes from '../../config/navigation/routes';
 import { useAppDispatch } from '../../hooks/navigation';
 import mockedUsers from '../../mock/users.json';
 import { userActions } from '../profile/redux';
-
-import {WINE_API_HOST} from '@env'
-
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const defaultUser = mockedUsers.results[0];
 
-  console.log("WINE_API_HOST", WINE_API_HOST)
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
 
   const openTabs = () => {
-    dispatch(userActions.setInitialUser({
-      id: defaultUser.id,
-      age: defaultUser.age,
-      name: defaultUser.name.first,
-      surname: defaultUser.name.last,
-    }));
 
-    navigation.dispatch(StackActions.replace(Routes.tabs));
+    let pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+
+    if (pattern.test(username) || username.length < 5) {
+      setUsernameError(true)
+      setTimeout(() => setUsernameError(false), 5000);
+      Alert.alert("formHasErrors")
+    } else {
+
+      dispatch(userActions.setInitialUser({
+        id: defaultUser.id,
+        age: defaultUser.age,
+        name: defaultUser.name.first,
+        surname: defaultUser.name.last,
+      }));
+
+      navigation.dispatch(StackActions.replace(Routes.tabs));
+    }
+
   };
 
+  const togglePasswordVisibility = () => {
+    setVisiblePassword(!visiblePassword)
+  }
+
+  const loginWithGoogle = () => {
+
+  }
+
+  const onButtonPressOut = () =>{
+    console.log("out");
+    clearInterval(timer);
+  }
+
+
   return (
-    <View style={styles.container}>
 
 
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <SafeAreaView style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-    <View style={styles.loginFormWrapper}>
+          <View style={styles.loginFormWrapper}>
+            <Text style={styles.title}>LOGIN PAGE</Text>
+            <View style={styles.loginFormInputWrapper} >
+              <Ionicons name="person" size={22} color="#841584" style={styles.loginFormInputIcon} />
+              <TextInput
+                style={[styles.loginFormInput, usernameError ? { borderColor: "red" } : { borderColor: "grey" }]}
+                onChangeText={(username) => { setUsername(username) }}
+                placeholder="Login"
+             
+              />
+            </View>
+            <View style={styles.loginFormInputWrapper}>
+              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.loginFormInputIcon}>
+                <Ionicons name={visiblePassword ? 'eye-off' : 'eye'} size={22} color="#841584" />
+              </TouchableOpacity>
+              <TextInput
+                style={styles.loginFormInput}
+                //onChangeText={}
+                placeholder="Password"
+                secureTextEntry={!visiblePassword}
+              />
+            </View>
+            <Pressable style={styles.loginFormBtn} onPress={openTabs}>
+              <Text style={styles.loginFormBtnText}>Go to application</Text>
+            </Pressable>
+            <TouchableOpacity onPress={loginWithGoogle} style={styles.loginWithGoogle}>
+              <Ionicons name="logo-google" size={50} color="#841584" />
+            </TouchableOpacity>
+          </View>
+        </TouchableWithoutFeedback>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
 
-    <Text style={styles.title}>LOGIN</Text>
-
-      <View style={styles.loginFormInputWrapper}>
-        <TextInput
-          style={styles.loginFormInput}
-          //onChangeText={}
-          // value={number}
-          placeholder="Login"
-         
-        />
-
-
-
-      </View>
-      <View style={styles.loginFormInputWrapper}>
-        <TextInput
-            style={styles.loginFormInput}
-            //onChangeText={}
-            // value={number}
-            placeholder="Password"   
-        />
-      </View>
-      <Button
-        onPress={openTabs}
-        title="Go to application"
-        color="#841584"
-      />
-
-    </View>
-
-      
-      
-      
-    
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
-
-
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: '#ccc'
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 30,
+  },
   loginFormWrapper: {
     width: '80%',
-    minHeight: '50%',
-    justifyContent: 'space-around',
-    padding: 20,
+    alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -91,45 +126,37 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   loginFormInputWrapper: {
-
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+    backgroundColor: '#fff'
   },
-
   loginFormInput: {
-    backgroundColor: "#ccc",
     borderWidth: 1,
-
+    paddingLeft: 40,
+    height: 35,
+    width: '100%',
+    borderColor: 'grey'
   },
-
   loginFormInputIcon: {
-
+    position: 'absolute',
+    left: 9,
+    zIndex: 9
   },
-
   loginFormBtn: {
-
-  },
-
-
-
-
-
-
-  container: {
-    flex: 1,
+    backgroundColor: '#841584',
+    height: 35,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
     width: '80%',
+    marginBottom: 20
   },
-  button: {
-    backgroundColor: 'red',
-  }
+  loginFormBtnText: {
+    color: '#fff'
+  },
+  loginWithGoogle: {
+    marginBottom: 30
+  },
+
 });

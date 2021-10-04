@@ -3,6 +3,8 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { RootStackParamList } from '../../../types';
+import {WINE_API_HOST} from '@env'
+//console.log("WINE_API_HOST", WINE_API_HOST)
 
 export default function NotFoundScreen({
   navigation,
