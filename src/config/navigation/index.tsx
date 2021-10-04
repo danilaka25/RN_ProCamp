@@ -14,6 +14,7 @@ import { RootStackParamList } from '../../../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from '../../modules/login';
+import FirstEntry from '../../modules/firstEntry';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -35,6 +36,7 @@ function RootNavigator() {
       <Stack.Screen name={Routes.login} component={LoginScreen} />
       <Stack.Screen name={Routes.tabs} component={BottomTabNavigator} />
       <Stack.Screen name={Routes.notFound} component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name={Routes.firstEntry} component={FirstEntry}  />
     </Stack.Navigator>
   );
 }
