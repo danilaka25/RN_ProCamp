@@ -2,7 +2,7 @@
  
 <h2>Lesson 1 home work</h2>
 <p>
- <img src="screen_1.gif" >
+ <img src="screen_2.png" >
 </p>
 
 This application is needed for future GlobalLogic ReactNative ProCamp.
