@@ -1,44 +1,154 @@
-import * as React from 'react';
-import { Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Image, Text, SafeAreaView, Platform, Pressable } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { View } from '../../components/Themed';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import Routes from '../../config/navigation/routes';
 
+import imgPlaceholder from '../../../assets/images/icon.png';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
+
+import ContactsField from '../../components/contactsField';
+
+interface Props {
+  image: String;
+}
+
 export default function ProfileScreen() {
+
+  const [image, setImage] = useState<Props|null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   const navigation = useNavigation();
 
   const logOut = () => {
     navigation.dispatch(StackActions.replace(Routes.login));
-
   }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Button
-        onPress={logOut}
-        title="Log out"
-        color="#841584"
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+
+      <View style={styles.profileHeader}>
+
+        <Pressable style={styles.logOut} onPress={logOut}>
+          <Ionicons name="log-out-outline" size={30} color="#fff" />
+          <Text style={styles.logOutText}>Log out</Text>
+        </Pressable>
+
+        <Pressable style={styles.editPhoto} onPress={pickImage}>
+          <Text style={styles.editPhotoText}>Edit photo</Text>
+          <Ionicons name="create-outline" size={30} color="#fff" />
+        </Pressable>
+
+      </View>
+
+      <View style={styles.profileContent}>
+        <Image
+          style={styles.avatar}
+          source={image !== null ? { uri: image } : imgPlaceholder}
+        />
+        <Text style={styles.name}>Danylo Melnikov</Text>
+ 
+        <View style={styles.likesWrapper}><Text style={styles.likes}>40 likes</Text></View>
+  
+        <ContactsField icon="call-outline" text="38 (063) 233-22-11"/>
+        <ContactsField icon="mail-outline" text="someemail@gmail.com"/>
+        <ContactsField icon="map-outline" text="Some address 22/1"/>
+        <ContactsField text="text without icon"/>
+
+      </View>
+    </SafeAreaView>
+
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
+  profileHeader: {
+    backgroundColor: '#841584',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end'
+  },
+  logOut: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  logOutText: {
+    color: '#fff',
+    marginLeft: 5
+  },
+  editPhoto: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  editPhotoText: {
+    color: '#fff',
+    marginRight: 5
+  },
+  profileContent: {
+    flex: 2,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 160,
+    height: 160,
+    borderRadius: 160,
+    borderWidth: 6,
+    borderColor: "#ccc",
+    marginTop: -80,
+    zIndex: 9,
+    backgroundColor: '#fff',
+    marginBottom: 20
+  },
+  name: {
+    fontSize: 33,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  likesWrapper: {
+    backgroundColor: '#841584',
+    padding: 5,
+    marginVertical: 15
   },
+  likes: {
+    color: '#fff',
+    fontSize: 20
+  },
+ 
+
+
 });
