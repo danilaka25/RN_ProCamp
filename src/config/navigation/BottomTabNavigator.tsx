@@ -33,17 +33,17 @@ export default function BottomTabNavigator() {
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name={Routes.profile}
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
-        }}
-      />
-      <BottomTab.Screen
         name={Routes.swiper}
         component={SwiperScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="copy-outline" />,
+        }}
+      />
+      <BottomTab.Screen
+        name={Routes.profile}
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
         }}
       />
       <BottomTab.Screen

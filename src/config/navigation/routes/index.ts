@@ -4,6 +4,7 @@ const Routes = {
   swiper: 'SWIPER',
   chat: 'CHAT',
   profile: 'PROFILE',
+  editProfile: 'EDIT_PROFILE',
   login: 'LOGIN',
   tabs: 'TABS',
   firstEntry: 'FIRST_ENTRY'

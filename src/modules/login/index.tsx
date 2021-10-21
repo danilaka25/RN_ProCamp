@@ -46,7 +46,7 @@ export default function LoginScreen() {
   }
 
   const loginWithGoogle = () => {
-
+    navigation.dispatch(StackActions.replace(Routes.tabs));
   }
 
   return (

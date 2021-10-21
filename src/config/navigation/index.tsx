@@ -16,6 +16,12 @@ import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from '../../modules/login';
 import FirstEntry from '../../modules/firstEntry';
 
+import EditProfile from '../../modules/editProfile';
+
+
+
+
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
@@ -37,6 +43,7 @@ function RootNavigator() {
       <Stack.Screen name={Routes.tabs} component={BottomTabNavigator} />
       <Stack.Screen name={Routes.notFound} component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name={Routes.firstEntry} component={FirstEntry}  />
+      <Stack.Screen name={Routes.editProfile}  component={EditProfile} options={{ title: 'Oops!',  }} />
     </Stack.Navigator>
   );
 }
