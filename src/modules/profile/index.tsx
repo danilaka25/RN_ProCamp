@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, Text, SafeAreaView, Platform, Pressable } from 'react-native';
+import { StyleSheet, Image, Text, SafeAreaView, Platform, Pressable, Button } from 'react-native';
 
 import { View } from '../../components/Themed';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -15,7 +15,7 @@ interface Props {
   image: String;
 }
 
-export default function ProfileScreen() {
+export default function ProfileScreen(props: any) {
 
   const [image, setImage] = useState<Props|null>(null);
 
@@ -79,6 +79,14 @@ export default function ProfileScreen() {
         <ContactsField icon="mail-outline" text="someemail@gmail.com"/>
         <ContactsField icon="map-outline" text="Some address 22/1"/>
         <ContactsField text="text without icon"/>
+
+        <Button
+        title="EDIT PROFILE"
+        onPress={() => navigation.dispatch(StackActions.replace(Routes.editProfile))}
+      />
+
+    
+
 
       </View>
     </SafeAreaView>
