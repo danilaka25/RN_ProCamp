@@ -2,12 +2,13 @@ const Routes = {
   main: 'ROOT',
   notFound: 'NOT_FOUND',
   swiper: 'SWIPER',
-  chat: 'CHAT',
+  likes: 'LIKES_LIST',
   profile: 'PROFILE',
   editProfile: 'EDIT_PROFILE',
   login: 'LOGIN',
+  createAccount: 'CREATE_ACCOUNT',
   tabs: 'TABS',
-  firstEntry: 'FIRST_ENTRY'
+
 } as const;
 
 export default Routes;

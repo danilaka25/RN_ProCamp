@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, Text, SafeAreaView, Platform, Pressable, Button } from 'react-native';
-
+import { StyleSheet, Image, Text, SafeAreaView, Pressable, Button } from 'react-native';
 import { View } from '../../components/Themed';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import Routes from '../../config/navigation/routes';
-
 import imgPlaceholder from '../../../assets/images/icon.png';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-
-import ContactsField from '../../components/contactsField';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ContactsField } from '../../components/core';
+import { signOut } from '../../redux/auth'
+import { useAppDispatch } from '../../hooks/navigation';
 
 interface Props {
   image: String;
 }
 
-export default function ProfileScreen(props: any) {
+const ProfileScreen = (props: any) => {
 
-  const [image, setImage] = useState<Props|null>(null);
+  const dispatch = useAppDispatch();
+  const [image, setImage] = useState<Props | null>(null);
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
       }
     })();
   }, []);
@@ -45,8 +44,10 @@ export default function ProfileScreen(props: any) {
 
   const navigation = useNavigation();
 
-  const logOut = () => {
-    navigation.dispatch(StackActions.replace(Routes.login));
+  const logOut = async () => {
+    console.log("logOut")
+    dispatch(signOut())
+    await AsyncStorage.removeItem('fireBaseToken');
   }
 
   return (
@@ -72,28 +73,26 @@ export default function ProfileScreen(props: any) {
           source={image !== null ? { uri: image } : imgPlaceholder}
         />
         <Text style={styles.name}>Danylo Melnikov</Text>
- 
+
         <View style={styles.likesWrapper}><Text style={styles.likes}>40 likes</Text></View>
-  
-        <ContactsField icon="call-outline" text="38 (063) 233-22-11"/>
-        <ContactsField icon="mail-outline" text="someemail@gmail.com"/>
-        <ContactsField icon="map-outline" text="Some address 22/1"/>
-        <ContactsField text="text without icon"/>
+
+        <ContactsField icon="call-outline" text="38 (063) 233-22-11" />
+        <ContactsField icon="mail-outline" text="someemail@gmail.com" />
+        <ContactsField icon="map-outline" text="Some address 22/1" />
+        <ContactsField text="text without icon" />
 
         <Button
-        title="EDIT PROFILE"
-        onPress={() => navigation.dispatch(StackActions.replace(Routes.editProfile))}
-      />
-
-    
-
+          title="EDIT PROFILE"
+          onPress={() => navigation.dispatch(StackActions.replace(Routes.editProfile))}
+        />
 
       </View>
     </SafeAreaView>
 
-
   );
 }
+
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -156,7 +155,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20
   },
- 
-
 
 });

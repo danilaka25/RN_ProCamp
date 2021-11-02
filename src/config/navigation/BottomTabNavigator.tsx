@@ -11,9 +11,8 @@ import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
 import Routes from './routes';
 import SwiperScreen from '../../modules/swiper';
-import ChatScreen from '../../modules/chat';
+import LikesScreen from '../../modules/likeList';
 import ProfileScreen from '../../modules/profile';
-import FirstEntry from '../../modules/firstEntry';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -23,6 +22,7 @@ const BottomTab = createBottomTabNavigator();
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
 export default function BottomTabNavigator() {
+  
   const colorScheme = useColorScheme();
 
   const getIconColor = (focused: boolean) => focused ? Colors[colorScheme].tabIconSelected : Colors[colorScheme].tabIconDefault;
@@ -30,7 +30,9 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName={Routes.tabs}
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+      tabBarOptions={{
+        activeTintColor: Colors[colorScheme].tint,
+      }}
     >
       <BottomTab.Screen
         name={Routes.swiper}
@@ -44,22 +46,18 @@ export default function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
+          unmountOnBlur: true
         }}
       />
       <BottomTab.Screen
-        name={Routes.chat}
-        component={ChatScreen}
+        name={Routes.likes}
+        component={LikesScreen}
         options={{
-          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="chatbubbles-outline" />,
+          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="heart-half-outline" />,
+          unmountOnBlur: true
         }}
       />
-      <BottomTab.Screen
-        name={Routes.firstEntry}
-        component={FirstEntry}
-        options={{
-          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
-        }}
-      />
+
     </BottomTab.Navigator>
   );
 }

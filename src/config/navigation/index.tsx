@@ -5,24 +5,23 @@
  */
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ColorSchemeName, View, Text } from 'react-native';
 import Routes from './routes';
-
 import NotFoundScreen from '../../modules/notFound';
 import { RootStackParamList } from '../../../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from '../../modules/login';
-import FirstEntry from '../../modules/firstEntry';
-
+import CreateAccountScreen from '../../modules/createAccount';
 import EditProfile from '../../modules/editProfile';
-
-
-
-
+import { useAppSelector } from '../../hooks/navigation';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { restoreToken } from '../../redux/auth'
+import { useAppDispatch } from '../../hooks/navigation';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
@@ -34,16 +33,54 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
 // A root stack navigator is often used for displaying modals on top of all other content
 // Read more here: https://reactnavigation.org/docs/modal
-const Stack = createStackNavigator<RootStackParamList>();
+const MainStack = createStackNavigator<RootStackParamList>();
+const AuthStack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector(state => state.auth.fireBaseToken);
+  const loading = useAppSelector(state => state.auth.isLoading);
+
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    (async function () {
+      try {
+        let fireBaseToken = await AsyncStorage.getItem("fireBaseToken");
+        await setToken(fireBaseToken)
+      } catch (e) {
+        console.error(e);
+      } 
+
+      dispatch(restoreToken(token))
+
+    })();
+  }, [token]);
+
+ 
+  if (loading) {
+    return (
+        <View style={{backgroundColor: '#ccc', flex: 1}}>
+            <Text>loading ...</Text>
+        </View>
+    );
+
+}
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.login}>
-      <Stack.Screen name={Routes.login} component={LoginScreen} />
-      <Stack.Screen name={Routes.tabs} component={BottomTabNavigator} />
-      <Stack.Screen name={Routes.notFound} component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Screen name={Routes.firstEntry} component={FirstEntry}  />
-      <Stack.Screen name={Routes.editProfile}  component={EditProfile} options={{ title: 'Oops!',  }} />
-    </Stack.Navigator>
+
+    (auth !== null) ? (
+      <MainStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.tabs}>
+        <MainStack.Screen name={Routes.tabs} component={BottomTabNavigator} />
+        <MainStack.Screen name={Routes.notFound} component={NotFoundScreen} />
+        <MainStack.Screen name={Routes.editProfile} component={EditProfile} options={{ title: 'Oops!', }} />
+      </MainStack.Navigator>
+    ) : (
+      <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.login}>
+        <AuthStack.Screen name={Routes.login} component={LoginScreen} />
+        <AuthStack.Screen name={Routes.createAccount} component={CreateAccountScreen} />
+      </AuthStack.Navigator>
+    )
   );
 }

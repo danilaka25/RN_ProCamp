@@ -1,46 +1,61 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import { Alert, StyleSheet, SafeAreaView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import Routes from '../../config/navigation/routes';
 import { useAppDispatch } from '../../hooks/navigation';
-import { auth } from '../../config/firebase';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth, store } from '../../config/firebase';
 import { signIn } from '../../redux/auth';
 import { Button, Input } from '../../components/core';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen() {
+export default function CreateAccountScreen() {
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [emialError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [firebaseUserData, setFirebaseUserData] = useState('');
+  //const [visiblePassword, setVisiblePassword] = useState(false);
 
-  const Login = async () => {
+  const onHandleSignup = async () => {
+
     if (email !== '' && password !== '') {
+
       try {
 
         let userData: object;
 
-        await auth.signInWithEmailAndPassword(email, password).then((userCredential: object) => {
-          userData = userCredential.user.toJSON();
-        })
-        
+        await auth.createUserWithEmailAndPassword(email, password).then((userCredential) => {
 
-        await AsyncStorage.setItem("fireBaseToken",  userData.email)
+          userData = userCredential.user.toJSON();
+
+          store.collection('users')
+            .doc(userData.email)
+            .set({
+              email: userData.email,
+              token: userData.stsTokenManager.accessToken,
+              lastSeenPage: 1,
+            });
+
+        })
+
+        await AsyncStorage.setItem("fireBaseToken", userData.email)
 
         dispatch(signIn(userData.email))
 
-        Alert.alert("You are logt in")
+        Alert.alert("Your account created successful")
 
       } catch (error) {
         console.log("error", error)
-      }
+        if (error.toString().includes('The email address is already in use by another account')) {
+          Alert.alert("The email address is already in use by another account")
+        } else {
+          Alert.alert("Some another error")
+        }
 
+      }
     }
 
     email == '' ? setEmailError(true) : setEmailError(false)
@@ -48,8 +63,8 @@ export default function LoginScreen() {
 
   };
 
-  const createAccount = () => {
-    navigation.dispatch(StackActions.replace(Routes.createAccount));
+  const backToLogin = () => {
+    navigation.dispatch(StackActions.replace(Routes.login))
   }
 
   return (
@@ -60,11 +75,11 @@ export default function LoginScreen() {
 
           <View style={styles.loginFormWrapper}>
 
-            <Text style={styles.title}>LOGIN PAGE</Text>
+            <Text style={styles.title}>CREATE ACCOUNT</Text>
             <Input name='Email' value={email} onChange={setEmail} icon={'mail-outline'} error={emialError ? true : false} />
             <Input name='Password' value={password} onChange={setPassword} icon={'eye-off'} error={passwordError ? true : false} isPassword={true} />
-            <Button label={'Login'} onPress={Login} />
-            <Button label={'Create account'} onPress={createAccount} transparent />
+            <Button label={'Create account'} onPress={onHandleSignup} />
+            <Button label={'Back to login'} onPress={backToLogin} transparent />
 
           </View>
         </TouchableWithoutFeedback>
@@ -102,5 +117,4 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   }
-
 });

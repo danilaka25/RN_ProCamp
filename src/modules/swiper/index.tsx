@@ -1,68 +1,104 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { usePreviousState } from '../../hooks/usePreviousState';
 import {
-    ActivityIndicator, Image, ScrollView, FlatList, Button, SafeAreaView, Text,
+    ActivityIndicator, FlatList, SafeAreaView, Text,
     View, StyleSheet, Dimensions
 } from "react-native";
-import { useQuery, useLazyQuery } from '@apollo/client'
-import styled from 'styled-components/native'
-
-import { GetAnimeList } from './graphql'
+import { useQuery } from '@apollo/client'
+import { store } from '../../config/firebase';
+import { useAppSelector } from '../../hooks/navigation';
+import { GetAnimeList } from './graphql';
+import AnimeCard from '../../components/core/AnimeCard';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-const renderAnimeItem = ({ item }) => {
-    return (
-        <View key={item.id} style={styles.itemAnime}>
-            <Image source={{uri: item.coverImage.large}}  resizeMode="cover" style={styles.itemAnimeImage}/>
-            <Text style={styles.itemAnimeTitle}>{item.title.romaji}</Text>
-        </View>
-    )
-}
 
 const AnimeSwiperScreen = () => {
 
     const [anime, setAnime] = useState();
-    const [variables, setVariables] = useState({ page: 1, perPage: 20 });
-    const { data, loading, error } = useQuery(GetAnimeList, { variables }) 
-    //const ref: RefObject<Flatlist> = useRef(null)
+    const [variables, setVariables] = useState({ page: 1, perPage: 10 });
+    const { data, loading, error } = useQuery(GetAnimeList, { variables })
+    const ref: RefObject<Flatlist> = useRef(null)
+    const userId = useAppSelector(state => state.auth.fireBaseToken);
+
+    const prevPage = usePreviousState(variables.page)
+    const prevAnime = usePreviousState(anime)
+
+    const getLastSeenPage = () => {
+
+        store.collection("users").doc(userId).get().then((doc) => {
+            let requestParams = { ...variables }
+            if (doc.exists) {
+                requestParams.page = doc.data().lastSeenPage
+                setVariables({ ...requestParams })
+            } else {
+                requestParams.page = 1
+                setVariables({ ...requestParams })
+            }
+
+        })
+
+    }
 
     const fetch = () => {
 
-        if (data) {
-            if (variables.page > 1) {
-                let newAnimeAdded = [...anime, ...data.Page.media]
-                setAnime(newAnimeAdded)
-            } else {
-                setAnime(data.Page.media);
-            }
-
-        } else {
-
-            if (loading) {
-                return (
-                    <View>
-                        <Text>loading</Text>
-                    </View>
-                );
-            }
-
-            if (error) {
-                console.log("error", error)
-                return (
-                    <View>
-                        <Text>error :(</Text>
-                    </View>
-                );
-            }
+        if (loading) {
+            return (
+                <View style={{ backgroundColor: 'red' }}>
+                    <Text>loading</Text>
+                </View>
+            );
         }
 
+        if (error) {
+
+            return (
+                <View>
+                    <Text>error :(</Text>
+                </View>
+            );
+        }
+
+        if (data) {
+
+            //console.log("data page", variables.page, prevPage)
+
+            if (variables.page !== prevPage && typeof (prevPage) == 'number') { // need to refactor
+
+                console.log("fetch 1")
+
+                let newAnimeAdded = [...anime, ...data.Page.media]
+
+                setAnime(newAnimeAdded)
+
+                store.collection('users')
+                    .doc(userId)
+                    .update({
+                        lastSeenPage: data.Page.pageInfo.currentPage
+                    });
+
+            } else {
+
+                console.log("fetch 2")
+
+                setAnime(data.Page.media);
+
+            }
+
+        }
     }
 
     useEffect(() => {
         fetch()
-    }, [data, variables, error]);
+    }, []);
+
+    useEffect(() => {
+        getLastSeenPage()
+        fetch()
+    }, [data, loading, error]);
 
     const loadMore = () => {
         let requestParams = { ...variables }
@@ -75,12 +111,12 @@ const AnimeSwiperScreen = () => {
     return (
         <SafeAreaView>
             <FlatList
-                // ref={ref}
+                ref={ref}
                 data={anime}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={renderAnimeItem}
+                renderItem={(item) => (<AnimeCard props={item} />)}
                 onEndReached={loadMore}
-                onEndReachedThreshold={1}
+                onEndReachedThreshold={5}
                 style={styles.listAnime}
             />
         </SafeAreaView>
@@ -95,11 +131,10 @@ const styles = StyleSheet.create({
     },
     itemAnime: {
         position: 'relative',
-        height: SCREEN_HEIGHT/2,
+        height: SCREEN_HEIGHT / 2,
         width: SCREEN_WIDTH - 20,
         marginBottom: 20,
         borderRadius: 5,
-        
         marginLeft: 'auto',
         marginRight: 'auto',
         alignItems: 'center'
@@ -116,5 +151,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 5,
         borderRadius: 5
+    },
+    heart: {
+        position: 'absolute',
+        right: 0,
+        top: 0
     }
 })

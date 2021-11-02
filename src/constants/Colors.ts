@@ -8,7 +8,7 @@ export default {
     background: '#fff',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
-    tabIconSelected: green,
+    tabIconSelected: '#841584',
     // custom colors
     pink: '#ce2163',
     lila: '#9153b6',
