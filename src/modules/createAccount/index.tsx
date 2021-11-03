@@ -37,6 +37,7 @@ export default function CreateAccountScreen() {
               email: userData.email,
               token: userData.stsTokenManager.accessToken,
               lastSeenPage: 1,
+              avatarUrl: 'https://firebasestorage.googleapis.com/v0/b/rnbasecamp.appspot.com/o/ava.png?alt=media&token=1d50a462-9615-4e72-a362-bdc184cd6ea1',
             });
 
         })
@@ -79,7 +80,7 @@ export default function CreateAccountScreen() {
             <Input name='Email' value={email} onChange={setEmail} icon={'mail-outline'} error={emialError ? true : false} />
             <Input name='Password' value={password} onChange={setPassword} icon={'eye-off'} error={passwordError ? true : false} isPassword={true} />
             <Button label={'Create account'} onPress={onHandleSignup} />
-            <Button label={'Back to login'} onPress={backToLogin} transparent />
+            
 
           </View>
         </TouchableWithoutFeedback>

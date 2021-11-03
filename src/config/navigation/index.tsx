@@ -8,13 +8,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, useEffect } from 'react';
 import { ColorSchemeName, View, Text } from 'react-native';
 import Routes from './routes';
-import NotFoundScreen from '../../modules/notFound';
 import { RootStackParamList } from '../../../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from '../../modules/login';
 import CreateAccountScreen from '../../modules/createAccount';
-import EditProfile from '../../modules/editProfile';
 import { useAppSelector } from '../../hooks/navigation';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { restoreToken } from '../../redux/auth'
@@ -73,8 +71,6 @@ function RootNavigator() {
     (auth !== null) ? (
       <MainStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.tabs}>
         <MainStack.Screen name={Routes.tabs} component={BottomTabNavigator} />
-        <MainStack.Screen name={Routes.notFound} component={NotFoundScreen} />
-        <MainStack.Screen name={Routes.editProfile} component={EditProfile} options={{ title: 'Oops!', }} />
       </MainStack.Navigator>
     ) : (
       <AuthStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={Routes.login}>

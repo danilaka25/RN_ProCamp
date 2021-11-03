@@ -13,6 +13,7 @@ import Routes from './routes';
 import SwiperScreen from '../../modules/swiper';
 import LikesScreen from '../../modules/likeList';
 import ProfileScreen from '../../modules/profile';
+import EditProfile from '../../modules/editProfile';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -46,6 +47,14 @@ export default function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
+          unmountOnBlur: true
+        }}
+      />
+      <BottomTab.Screen
+        name={Routes.editProfile}
+        component={EditProfile}
+        options={{
+          tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-add-outline" />,
           unmountOnBlur: true
         }}
       />

@@ -1,74 +1,59 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native'
-import { Alert, Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import { useAppSelector } from '../../hooks/navigation';
-import {Button,  Input} from "../../components/core";
-import { store, firebase } from '../../config/firebase';
+import { Button, Input } from "../../components/core";
 
+import { getUserPersonalData, updateUserData } from '../../dbActions'
 
-const AddItemScreen = () => {
+const EditProfile = () => {
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
-    const [simpleText, setSimpleText] = useState('')
     const userId = useAppSelector(state => state.auth.fireBaseToken);
 
-    const [image, setImage] = useState('https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg')
-  
-
-   // const [create, {data, loading, error}] = useMutation(CreateItem)
-      
-    const getUserPersonalData = () => {
-        store.collection("users").where(firebase.firestore.FieldPath.documentId(), '==', userId)
-        .get()
-        .then((querySnapshot) => {
-          let userData: Array<number> = []
-          querySnapshot.forEach((doc) => {
-            
-            //userData = Object.values(doc.data());
-            //userData = Object.keys(doc.data());
-
-            // console.log(Object.keys(doc.data()))
-
-            // if(Object.keys(doc.data()) == 'phone') {
-
-            //     setPhone(Object.values(doc.data()))
-            // }
-
-          });
-       
+    const getUserContacts = (userId) => {
+        getUserPersonalData(userId).then((userData) => {
+            setPhone(userData.phone)
+            setAddress(userData.address)
         })
-        .catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
-    }
-     
-
-    const send = () => {
-     
     }
 
     useEffect(() => {
-        getUserPersonalData()
+        getUserContacts(userId)
     }, [])
+
+
+    const saveUserData = () => {
+        console.log("saveUserData")
+        updateUserData(userId, 'phone', phone)
+        updateUserData(userId, 'address', address)
+        Alert.alert("You data saved")
+    }
 
     return (
         <Container>
             <FormWrapper>
-                {/* <ImagePicker setImage={setImage} image={image} /> */}
-                <Text>{phone}</Text>
-                <Input name='Your phone' value={phone} onChange={setPhone} />
-                <Input name='Your address' value={address} onChange={setAddress} />
-                <Button onPress={send}  label={'SAVE ITEM'} />
+                <TITLE>EDIT DATA</TITLE>
+                <Input name={phone ? phone : 'Enter your phone'} value={phone} onChange={setPhone} />
+                <Input name={address ? address : 'Enter your address'} value={address} onChange={setAddress} />
+                <Button label={'Save data'} onPress={saveUserData} />
             </FormWrapper>
         </Container>
     );
 }
 
+const TITLE = styled.Text({
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20,
+})
+
 const Container = styled.View({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff' 
+    backgroundColor: '#fff'
 })
 
 const FormWrapper = styled.View({
@@ -78,8 +63,6 @@ const FormWrapper = styled.View({
     paddingLeft: 20,
     paddingRight: 20,
     shadowColor: "#000",
- 
- 
 })
 
-export default AddItemScreen
+export default EditProfile

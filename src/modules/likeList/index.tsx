@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../../components/Themed';
-import { store } from '../../config/firebase';
 import { useAppSelector } from '../../hooks/navigation';
-import { firebase } from '../../config/firebase';
+import {getAllLikes} from '../../dbActions'
+
 
 export default function ChatScreen() {
 
@@ -12,18 +12,9 @@ export default function ChatScreen() {
 
   const getUserLikes = () => {
 
-    store.collection("likes").where(firebase.firestore.FieldPath.documentId(), '==', userId)
-      .get()
-      .then((querySnapshot) => {
-        let likeIds: Array<number> = []
-        querySnapshot.forEach((doc) => {
-          likeIds = Object.values(doc.data());
-        });
-        setLikesList(likeIds)
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
+    getAllLikes(userId).then((likeIds)=>{
+      setLikesList(likeIds)
+    })
 
   }
 
@@ -34,7 +25,7 @@ export default function ChatScreen() {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}>My likrd anime</Text>
+      <Text style={styles.title}>My liked anime</Text>
       {
         likesList.map(function (item, i) {
           { console.log('view', item) }

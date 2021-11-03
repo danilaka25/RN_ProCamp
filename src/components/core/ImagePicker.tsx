@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
-import {Button, Image, View, Platform, Pressable} from 'react-native';
+import { Button, Image, View, Platform, Pressable } from 'react-native';
 import styled from 'styled-components/native'
 import * as ExpoImagePicker from 'expo-image-picker';
-
-// @ts-ignore
-//import noImage from '../../assets/images/noImage.png'
 
 interface ImagePickerProps {
     setImage: Function
@@ -12,17 +9,17 @@ interface ImagePickerProps {
 }
 
 const ImagePicker = ({
-        setImage,
-        image
-    }: ImagePickerProps) => {
+    setImage,
+    image
+}: ImagePickerProps) => {
     useEffect(() => {
         (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
+
+            const { status } = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
             }
+
         })();
     }, []);
 
@@ -34,7 +31,7 @@ const ImagePicker = ({
             quality: 1,
         });
 
-        console.log(result);
+        console.log("result", result);
 
         if (!result.cancelled) {
             setImage(result.uri);
@@ -44,7 +41,7 @@ const ImagePicker = ({
     return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Pressable onPress={pickImage}>
-                <ChosenImage source={ image ? { uri: image } : noImage} />
+                <ChosenImage source={image ? { uri: image } : noImage} />
             </Pressable>
         </View>
     );

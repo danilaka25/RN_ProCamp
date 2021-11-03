@@ -2,11 +2,11 @@ const Routes = {
   main: 'ROOT',
   notFound: 'NOT_FOUND',
   swiper: 'SWIPER',
-  likes: 'LIKES_LIST',
+  likes: 'LIKES LIST',
   profile: 'PROFILE',
-  editProfile: 'EDIT_PROFILE',
+  editProfile: 'EDIT PROFILE',
   login: 'LOGIN',
-  createAccount: 'CREATE_ACCOUNT',
+  createAccount: 'CREATE ACCOUNT',
   tabs: 'TABS',
 
 } as const;

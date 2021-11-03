@@ -4,15 +4,12 @@ import {
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useAppSelector } from '../../hooks/navigation';
-import { firebase, store } from '../../config/firebase';
+import {saveLikesToDB} from '../../dbActions'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
 
-
 const AnimeCard = ({ props }) => {
-
-    //console.log("111", props )
 
     const userId = useAppSelector(state => state.auth.fireBaseToken);
     const [like, setLike] = useState(false);
@@ -20,21 +17,12 @@ const AnimeCard = ({ props }) => {
     const handleLike = () => {
 
         if (!like) {
-            store
-                .collection('likes')
-                .doc(userId)
-                .set(
-                    { [props.item.id]: props.item.title.romaji }, { merge: true }
-                )
+            saveLikesToDB('save', props, userId )
         } else {
-            let docRef = store.collection('likes').doc(userId)
-            docRef.update({
-                [props.item.id]: firebase.firestore.FieldValue.delete()
-            });
+            saveLikesToDB('remove', props, userId )
         }
 
         setLike(!like)
-
     }
 
     return (
