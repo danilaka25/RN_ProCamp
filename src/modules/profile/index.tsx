@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, Text, SafeAreaView, Pressable, Button, Linking, Alert, ActivityIndicator } from 'react-native';
 import { View } from '../../components/Themed';
 import imgPlaceholder from '../../../assets/images/icon.png';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ContactsField } from '../../components/core';
+import { ContactsField, ImagePickerBtn } from '../../components/core';
 import { signOut } from '../../redux/auth'
 import { useAppDispatch, useAppSelector } from '../../hooks/navigation';
-import { getAllLikes, getUserPersonalData, updateUserData } from '../../dbActions'
-import * as Permissions from 'expo-permissions';
-import { storage } from '../../config/firebase';
+import { getAllLikes, getUserPersonalData } from '../../dbActions'
 
 interface Props {
   image: String;
 }
 
-const ProfileScreen = (props: any) => {
+const ProfileScreen = (props: Object) => {
 
   const dispatch = useAppDispatch();
   const userId = useAppSelector(state => state.auth.fireBaseToken);
@@ -25,24 +22,7 @@ const ProfileScreen = (props: any) => {
   const [userData, setUserData] = useState({});
   const [isLoading, setIsLoading] = useState(true)
 
-
   useEffect(() => {
-    (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert(
-          'Sorry',
-          'Sorry, we need camera roll permissions to make this work!',
-          [
-            { text: 'Give permissions', onPress: () => Linking.openURL('app-settings:') },
-            { text: 'No', onPress: () => console.log('No button clicked'), style: 'cancel' },
-          ],
-          {
-            cancelable: true
-          }
-        );
-      }
-    })();
 
     countLikes(userId)
     getUserContacts(userId)
@@ -50,13 +30,13 @@ const ProfileScreen = (props: any) => {
   }, []);
 
 
-  const countLikes = (userId) => {
+  const countLikes = (userId: String) => {
     getAllLikes(userId).then((likeIds) => {
       setLikes(Object.keys(likeIds).length)
     })
   }
 
-  const getUserContacts = (userId) => {
+  const getUserContacts = (userId : String) => {
     getUserPersonalData(userId).then((userData) => {
       setUserData(userData)
 
@@ -68,62 +48,12 @@ const ProfileScreen = (props: any) => {
     })
   }
 
-
-  const pickImage = async () => {
-    
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 0,
-    });
-
-    let storageUrl = await uploadImageAsync(result.uri)
-    console.log("storageUrl", storageUrl)
-    
-    setImage(storageUrl);
-   
-
-    if (!result.cancelled) {
-
-      setImage(result.uri);
-      updateUserData(userId, 'avatarUrl', storageUrl)
-
-    }
-
-  };
-
- 
   const logOut = async () => {
     console.log("logOut")
     dispatch(signOut())
     await AsyncStorage.removeItem('fireBaseToken');
   }
 
-  async function uploadImageAsync(uri) {
-
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
-    });
-
-    const ref = storage.ref().child(new Date().toISOString());
-    const snapshot = await ref.put(blob);
-    blob.close();
-
-    return await snapshot.ref.getDownloadURL();
-  }
-
-  // if(isLoading) return <ActivityIndicator/>
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,10 +65,7 @@ const ProfileScreen = (props: any) => {
           <Text style={styles.logOutText}>Log out</Text>
         </Pressable>
 
-        <Pressable style={styles.editPhoto} onPress={pickImage}>
-          <Text style={styles.editPhotoText}>Edit photo</Text>
-          <Ionicons name="create-outline" size={30} color="#fff" />
-        </Pressable>
+        <ImagePickerBtn />
 
       </View>
 

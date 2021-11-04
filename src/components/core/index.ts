@@ -2,12 +2,12 @@ import Button from "./Button";
 import Input from "./Input";
 import AnimeCard from "./AnimeCard";
 import ContactsField from "./ContactsField";
-//import ImagePicker from "./ImagePicker";
+import ImagePickerBtn from "./ImagePicker";
 
 
 export {
     Button,
-  //  ImagePicker,
+    ImagePickerBtn,
     Input,
     AnimeCard,
     ContactsField

@@ -1,51 +1,109 @@
 import React, { useEffect } from 'react';
-import { Button, Image, View, Platform, Pressable } from 'react-native';
+import { Button, Image, View,  Pressable, Alert, Linking } from 'react-native';
 import styled from 'styled-components/native'
-import * as ExpoImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import { useAppSelector } from '../../hooks/navigation';
+import { Ionicons } from '@expo/vector-icons';
+import { updateUserData } from '../../dbActions'
+import { storage } from '../../config/firebase';
+
 
 interface ImagePickerProps {
     setImage: Function
     image: string
 }
 
-const ImagePicker = ({
+const ImagePickerBtn = ({
     setImage,
     image
 }: ImagePickerProps) => {
+
+    const userId = useAppSelector(state => state.auth.fireBaseToken);
+
     useEffect(() => {
+
         (async () => {
-
-            const { status } = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+                Alert.alert(
+                    'Sorry',
+                    'Sorry, we need camera roll permissions to make this work!',
+                    [
+                        { text: 'Give permissions', onPress: () => Linking.openURL('app-settings:') },
+                        { text: 'No', onPress: () => console.log('No button clicked'), style: 'cancel' },
+                    ],
+                    {
+                        cancelable: true
+                    }
+                );
             }
-
         })();
+
     }, []);
 
+
     const pickImage = async () => {
-        let result: any = await ExpoImagePicker.launchImageLibraryAsync({
-            mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+            aspect: [4, 4],
+            quality: 0,
         });
 
-        console.log("result", result);
+        let storageUrl = await uploadImageAsync(result.uri)
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            updateUserData(userId, 'avatarUrl', storageUrl)
         }
+
     };
 
+    async function uploadImageAsync(uri: String) {
+
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+          };
+          xhr.responseType = 'blob';
+          xhr.open('GET', uri, true);
+          xhr.send(null);
+        });
+    
+        const ref = storage.ref().child(new Date().toISOString()); //* *  */
+
+        const snapshot = await ref.put(blob);
+        blob.close();
+    
+        return await snapshot.ref.getDownloadURL();
+    }
+
     return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Pressable onPress={pickImage}>
-                <ChosenImage source={image ? { uri: image } : noImage} />
-            </Pressable>
-        </View>
+        <ChosenImageContainer>
+            <ChosenImageText>Edit photo</ChosenImageText>
+            <Pressable onPress={pickImage}><Ionicons name="create-outline" size={30} color="#fff" /></Pressable>
+        </ChosenImageContainer>
     );
 }
+
+const ChosenImageContainer = styled.View({
+    position: 'absolute',
+    top: 7,
+    right: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+})
+
+const ChosenImageText = styled.Text({
+    color: '#fff',
+    marginRight: 5
+})
 
 const ChosenImage = styled.Image({
     width: 350,
@@ -53,4 +111,4 @@ const ChosenImage = styled.Image({
     borderRadius: 50,
 })
 
-export default ImagePicker
+export default ImagePickerBtn
