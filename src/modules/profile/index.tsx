@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, Text, SafeAreaView, Pressable, Button, Linking, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, Text, SafeAreaView, Pressable, ActivityIndicator } from 'react-native';
 import { View } from '../../components/Themed';
-import imgPlaceholder from '../../../assets/images/icon.png';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ContactsField, ImagePickerBtn } from '../../components/core';
@@ -16,8 +15,8 @@ interface Props {
 const ProfileScreen = (props: Object) => {
 
   const dispatch = useAppDispatch();
+  const avatarUrl = useAppSelector(state => state.user.avatarUrl);
   const userId = useAppSelector(state => state.auth.fireBaseToken);
-  const [image, setImage] = useState<Props | null>(null);
   const [likes, setLikes] = useState([]);
   const [userData, setUserData] = useState({});
   const [isLoading, setIsLoading] = useState(true)
@@ -29,7 +28,6 @@ const ProfileScreen = (props: Object) => {
 
   }, []);
 
-
   const countLikes = (userId: String) => {
     getAllLikes(userId).then((likeIds) => {
       setLikes(Object.keys(likeIds).length)
@@ -39,11 +37,6 @@ const ProfileScreen = (props: Object) => {
   const getUserContacts = (userId : String) => {
     getUserPersonalData(userId).then((userData) => {
       setUserData(userData)
-
-      if(typeof(userData.avatarUrl) !== "undefined") {
-        setImage(userData.avatarUrl)
-      }
-
       setIsLoading(false)
     })
   }
@@ -72,7 +65,7 @@ const ProfileScreen = (props: Object) => {
       <View style={styles.profileContent}>
         <Image
           style={styles.avatar}
-          source={image !== null ? { uri: image } : imgPlaceholder}
+          source={avatarUrl === null ? { uri: userData.avatarUrl} : { uri: avatarUrl}}
         />
         <Text style={styles.name}>{userData.fullName ? userData.fullName : 'Enter your full name'}</Text>
         <View style={styles.likesWrapper}><Text style={styles.likes}>{likes} likes</Text></View>

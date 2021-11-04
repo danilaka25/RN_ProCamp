@@ -2,34 +2,37 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
   id: number | string | null;
-  name: string;
-  surname: string;
-  age: number | null;
+  fullName: string;
+  likes: number | null;
+  avatarUrl: string | null;
 }
 
 const initialState: UserState = {
   id: null,
-  name: '',
-  surname: '',
-  age: null,
+  fullName: '',
+  likes: 0,
+  avatarUrl: null
 };
 
-const slice = createSlice({
+const profileSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setInitialUser: (state, action: PayloadAction<UserState>) => {
       state.id = action.payload.id;
-      state.name = action.payload.name;
-      state.surname = action.payload.surname;
-      state.age = action.payload.age;
+      state.fullName = action.payload.fullName;
+      state.likes = action.payload.likes;
+      state.avatarUrl = action.payload.avatarUrl;  
     },
-    setUserName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload;
+    setUserFullName: (state, action: PayloadAction<string>) => {
+      state.fullName = action.payload;
+    },
+    setAvatarUrl: (state, action: PayloadAction<string>) => {
+      state.avatarUrl = action.payload;
     }
   },
 });
 
-export const userActions = slice.actions;
+export const {setAvatarUrl} = profileSlice.actions;
 
-export default slice.reducer;
+export default profileSlice.reducer;

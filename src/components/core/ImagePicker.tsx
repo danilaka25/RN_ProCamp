@@ -3,23 +3,16 @@ import { Button, Image, View,  Pressable, Alert, Linking } from 'react-native';
 import styled from 'styled-components/native'
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { useAppSelector } from '../../hooks/navigation';
+import { useAppSelector, useAppDispatch } from '../../hooks/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { updateUserData } from '../../dbActions'
 import { storage } from '../../config/firebase';
+import { setAvatarUrl } from '../../modules/profile/redux';
 
-
-interface ImagePickerProps {
-    setImage: Function
-    image: string
-}
-
-const ImagePickerBtn = ({
-    setImage,
-    image
-}: ImagePickerProps) => {
+const ImagePickerBtn = () => {
 
     const userId = useAppSelector(state => state.auth.fireBaseToken);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
 
@@ -56,6 +49,7 @@ const ImagePickerBtn = ({
 
         if (!result.cancelled) {
             updateUserData(userId, 'avatarUrl', storageUrl)
+            dispatch(setAvatarUrl(storageUrl))
         }
 
     };

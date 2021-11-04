@@ -47,7 +47,6 @@ export default function BottomTabNavigator() {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }: { focused: boolean }) => <Ionicons color={getIconColor(focused)} size={30} name="person-outline" />,
-          unmountOnBlur: true
         }}
       />
       <BottomTab.Screen
