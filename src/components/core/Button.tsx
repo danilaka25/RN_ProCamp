@@ -26,7 +26,7 @@ interface ButtonContainerProps {
     transparent: boolean
 }
 
-const ButtonContainer = styled.Pressable(({ transparent }: ButtonContainerProps) => ({
+const ButtonContainer = styled.TouchableOpacity(({ transparent }: ButtonContainerProps) => ({
     backgroundColor: transparent ? 'white' :  '#841584',
     height: 35,
     alignItems: 'center',

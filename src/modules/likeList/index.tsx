@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { useAppSelector } from '../../hooks/navigation';
-import {getAllLikes} from '../../dbActions'
-
+import { getAllLikes } from '../../dbActions'
 
 export default function ChatScreen() {
 
-  const [likesList, setLikesList] = useState<number[]>([]);
+  interface LikesShema {
+    [index: string]: string;
+  }
+
+  const [likesList, setLikesList] = useState<LikesShema | void | null>(null);
   const userId = useAppSelector(state => state.auth.fireBaseToken);
 
   const getUserLikes = () => {
-
-    getAllLikes(userId).then((likeIds)=>{
-      setLikesList(likeIds)
-    })
-
+    if (userId !== null) {
+      getAllLikes(userId).then((likeIds) => {
+        setLikesList(likeIds)
+      })
+    }
   }
 
   useEffect(() => {
@@ -26,16 +29,11 @@ export default function ChatScreen() {
     <View style={styles.container}>
 
       <Text style={styles.title}>My liked anime</Text>
-      {
-        likesList.map(function (item, i) {
-          { console.log('view', item) }
 
-          return (
-            <Text key={i} >{item}</Text>
-          )
+      {likesList && Object.keys(likesList).map((keyName, i) => (
+        <Text key={i} >{likesList[keyName]}</Text>
+      ))}
 
-        })
-      }    
     </View>
   );
 }

@@ -40,7 +40,7 @@ function RootNavigator() {
   const auth = useAppSelector(state => state.auth.fireBaseToken);
   const loading = useAppSelector(state => state.auth.isLoading);
 
-  const [token, setToken] = useState();
+  const [token, setToken] = useState<string | null>();
 
   useEffect(() => {
     (async function () {
@@ -49,22 +49,24 @@ function RootNavigator() {
         await setToken(fireBaseToken)
       } catch (e) {
         console.error(e);
-      } 
+      }
 
-      dispatch(restoreToken(token))
+      if (token) {
+        dispatch(restoreToken(token))
+      }
 
     })();
   }, [token]);
 
- 
+
   if (loading) {
     return (
-        <View style={{backgroundColor: '#ccc', flex: 1}}>
-            <Text>loading ...</Text>
-        </View>
+      <View style={{ backgroundColor: '#ccc', flex: 1 }}>
+        <Text>loading ...</Text>
+      </View>
     );
 
-}
+  }
 
   return (
 

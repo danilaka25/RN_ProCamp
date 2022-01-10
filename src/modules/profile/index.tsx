@@ -8,73 +8,103 @@ import { signOut } from '../../redux/auth'
 import { useAppDispatch, useAppSelector } from '../../hooks/navigation';
 import { getAllLikes, getUserPersonalData } from '../../dbActions'
 
-interface Props {
-  image: String;
+type userId = string | null
+
+type userData = {
+  address?: string,
+  phone?: string,
+  email?: string,
+  lastSeenPage?: number,
+  avatarUrl?: string,
+  token?: string
 }
 
-const ProfileScreen = (props: Object) => {
+const ProfileScreen = () => {
 
   const dispatch = useAppDispatch();
+
   const avatarUrl = useAppSelector(state => state.user.avatarUrl);
-  const userId = useAppSelector(state => state.auth.fireBaseToken);
-  const [likes, setLikes] = useState([]);
-  const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(true)
+  const userId: userId = useAppSelector(state => state.auth.fireBaseToken); 
+  const [likes, setLikes] = useState<number>(0);
+  const [userData, setUserData] = useState<userData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
 
-    countLikes(userId)
-    getUserContacts(userId)
+    if (userId !== null) {
+      countLikes(userId)
+      getUserContacts(userId)
+    }
 
   }, []);
 
-  const countLikes = (userId: String) => {
-    getAllLikes(userId).then((likeIds) => {
-      setLikes(Object.keys(likeIds).length)
-    })
+  useEffect(() => {
+
+  }, [likes])
+
+ 
+
+  const countLikes = (userId: string) => {
+
+    getAllLikes(userId)
+      .then((likeIds) => {
+
+        if (likeIds) {
+          setLikes(Object.keys(likeIds).length)
+        }
+
+      })
   }
 
-  const getUserContacts = (userId : String) => {
-    getUserPersonalData(userId).then((userData) => {
-      setUserData(userData)
-      setIsLoading(false)
-    })
+  const getUserContacts = (userId: string) => {
+    getUserPersonalData(userId)
+      .then((data) => {
+
+        if (data) {
+          setUserData(data)
+          return
+        }
+
+      })
+      .then(() => {
+        setIsLoading(false)
+      })
   }
 
   const logOut = async () => {
-    console.log("logOut")
     dispatch(signOut())
     await AsyncStorage.removeItem('fireBaseToken');
   }
 
 
+
+
   return (
-    <SafeAreaView style={styles.container}>
+    isLoading ? <ActivityIndicator /> :
+   
+      <SafeAreaView style={styles.container}>
+  {console.log('RENDER')}
+        <View style={styles.profileHeader}>
+          <Pressable style={styles.logOut} onPress={logOut}>
+            <Ionicons name="log-out-outline" size={30} color="#fff" />
+            <Text style={styles.logOutText}>Log out</Text>
+          </Pressable>
+          <ImagePickerBtn />
+        </View>
 
-      <View style={styles.profileHeader}>
+        {userData !== null &&
+          <View style={styles.profileContent}>
+            <Image
+              style={styles.avatar}
+              source={avatarUrl !== undefined ? { uri: userData.avatarUrl } : { uri: avatarUrl }}
+            />
+            <View style={styles.likesWrapper}><Text style={styles.likes}>{likes} likes</Text></View>
+            <ContactsField icon="call-outline" text={userData.phone ? userData.phone : 'Enter your phone'} />
+            <ContactsField icon="mail-outline" text={userData.email ? userData.email : 'Enter your email'} />
+            <ContactsField icon="map-outline" text={userData.address ? userData.address : 'Enter your address'} />
+          </View>}
 
-        <Pressable style={styles.logOut} onPress={logOut}>
-          <Ionicons name="log-out-outline" size={30} color="#fff" />
-          <Text style={styles.logOutText}>Log out</Text>
-        </Pressable>
-
-        <ImagePickerBtn />
-
-      </View>
-
-      <View style={styles.profileContent}>
-        <Image
-          style={styles.avatar}
-          source={avatarUrl === null ? { uri: userData.avatarUrl} : { uri: avatarUrl}}
-        />
-        <Text style={styles.name}>{userData.fullName ? userData.fullName : 'Enter your full name'}</Text>
-        <View style={styles.likesWrapper}><Text style={styles.likes}>{likes} likes</Text></View>
-        <ContactsField icon="call-outline" text={userData.phone ? userData.phone : 'Enter your phone'} />
-        <ContactsField icon="mail-outline" text={userData.email ? userData.email : 'Enter your email'} />
-        <ContactsField icon="map-outline" text={userData.address ? userData.address : 'Enter your address'} />
-
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
 
   );
 }

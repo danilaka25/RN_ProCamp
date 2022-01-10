@@ -1,6 +1,15 @@
 import { firebase, store } from '../config/firebase';
 
-const saveLikesToDB = (action: String, props: Object, userId: String) => {
+interface iAnimeItem {
+  item: {
+    id: string
+    title: {
+      romaji: string
+    }
+  }
+}
+
+const saveLikesToDB = (action: string, props: iAnimeItem, userId: string) => {
 
   if (action == 'save') {
 
@@ -21,38 +30,53 @@ const saveLikesToDB = (action: String, props: Object, userId: String) => {
 
 }
 
+interface LikesShema {
+  [index: string]: string;
+}
 
-const getAllLikes = (userId: String) => {
+const getAllLikes = function (userId: string) : Promise<void  | LikesShema >    {
 
-  return store.collection("likes").where(firebase.firestore.FieldPath.documentId(), '==', userId)
+   return store.collection("likes").where(firebase.firestore.FieldPath.documentId(), '==', userId)
     .get()
     .then((querySnapshot) => {
-      let likeIds: Array<number> = []
-      querySnapshot.forEach((doc) => {
-        likeIds = Object.values(doc.data());
-      });
-      console.log(likeIds)
+
+      let likeIds = {}
+
+      querySnapshot.forEach((doc) => { 
+        likeIds = Object(doc.data()) 
+      })
       return likeIds
+
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);
     });
 
+  }
+
+type userData = {
+  address?: string,
+  phone?: string,
+  email?: string,
+  lastSeenPage?: number,
+  avatarUrl?: string,
+  token?: string
+
 }
 
-const getUserPersonalData = (userId: String) => {
+const getUserPersonalData = function (userId: string) :   Promise<void | userData>{
 
   return store.collection("users").where(firebase.firestore.FieldPath.documentId(), '==', userId)
     .get()
     .then((querySnapshot) => {
 
-      let userData: Array<number> = {}
 
-      querySnapshot.forEach((doc) => {
-        userData = doc.data()
-      });
+      let userData: userData = {}
+
+      querySnapshot.forEach((doc) => { userData = doc.data() });
 
       return userData
+
 
     })
     .catch((error) => {
@@ -61,12 +85,12 @@ const getUserPersonalData = (userId: String) => {
 
 }
 
-const updateUserData = (userId: String, key: String, value: String) => {
+const updateUserData = (userId: string, key: string, value: string) => {
 
   store.collection('users')
     .doc(userId)
     .set(
-      { [key]:value }, { merge: true }
+      { [key]: value }, { merge: true }
     )
 
 }

@@ -80,7 +80,7 @@ export default function CreateAccountScreen() {
             <Input name='Email' value={email} onChange={setEmail} icon={'mail-outline'} error={emialError ? true : false} />
             <Input name='Password' value={password} onChange={setPassword} icon={'eye-off'} error={passwordError ? true : false} isPassword={true} />
             <Button label={'Create account'} onPress={onHandleSignup} />
-            
+            <Button label={'Back to login'} onPress={backToLogin} transparent />
 
           </View>
         </TouchableWithoutFeedback>

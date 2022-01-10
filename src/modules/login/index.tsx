@@ -8,6 +8,7 @@ import { auth } from '../../config/firebase';
 import { signIn } from '../../redux/auth';
 import { Button, Input } from '../../components/core';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Message } from '../likeList/types';
 
 export default function LoginScreen() {
 
@@ -20,25 +21,46 @@ export default function LoginScreen() {
   const [passwordError, setPasswordError] = useState(false);
   const [firebaseUserData, setFirebaseUserData] = useState('');
 
+
+  interface IuserData {
+    address: string | undefined,
+    phone: string | undefined,
+    displayName: string | undefined,
+    email: string | undefined,
+  }
+
+
+
+
   const Login = async () => {
     if (email !== '' && password !== '') {
+
       try {
 
-        let userData: object;
+        await auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
 
-        await auth.signInWithEmailAndPassword(email, password).then((userCredential: object) => {
-          userData = userCredential.user.toJSON();
+          if (userCredential.user !== null) {
+           // console.log('333', userCredential)
+           // setUserData(userCredential.user.toJSON() as IuserData)
+           return userCredential.user.email
+          
+          }
+
         })
-        
+        .then((email) => {
 
-        await AsyncStorage.setItem("fireBaseToken",  userData.email)
+            AsyncStorage.setItem("fireBaseToken", email as string)
+            dispatch(signIn(email as string))        
 
-        dispatch(signIn(userData.email))
+        })
 
-        Alert.alert("You are logt in")
 
-      } catch (error) {
-        console.log("error", error)
+      }
+
+      catch (error) {
+        if (error instanceof Error) {
+          Alert.alert("Error", JSON.stringify(error.message))
+        }
       }
 
     }
@@ -61,8 +83,8 @@ export default function LoginScreen() {
           <View style={styles.loginFormWrapper}>
 
             <Text style={styles.title}>LOGIN PAGE</Text>
-            <Input name='Email' value={email} onChange={setEmail} icon={'mail-outline'} error={emialError ? true : false} />
-            <Input name='Password' value={password} onChange={setPassword} icon={'eye-off'} error={passwordError ? true : false} isPassword={true} />
+            <Input placeholder='Email' value={email} onChange={setEmail} icon={'mail-outline'} error={emialError ? true : false} />
+            <Input placeholder='Password' value={password} onChange={setPassword} icon={'eye-off'} error={passwordError ? true : false} isPassword={true} />
             <Button label={'Login'} onPress={Login} />
             <Button label={'Create account'} onPress={createAccount} transparent />
 

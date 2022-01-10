@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native'
-import { Text, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { useAppSelector } from '../../hooks/navigation';
 import { Button, Input } from "../../components/core";
 
 import { getUserPersonalData, updateUserData } from '../../dbActions'
 
 const EditProfile = () => {
+
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
     const userId = useAppSelector(state => state.auth.fireBaseToken);
 
-    const getUserContacts = (userId) => {
+    const getUserContacts = (userId: string) => {
         getUserPersonalData(userId).then((userData) => {
-            setPhone(userData.phone)
-            setAddress(userData.address)
+
+            if (userData && userData.phone && userData.address) {
+                setPhone(userData.phone)
+                setAddress(userData.address)
+            }
+
         })
     }
 
     useEffect(() => {
-        getUserContacts(userId)
+        if (userId !== null) {
+            getUserContacts(userId)
+        }
     }, [])
 
-
     const saveUserData = () => {
-        console.log("saveUserData")
-        updateUserData(userId, 'phone', phone)
-        updateUserData(userId, 'address', address)
+        if (userId !== null) {
+            updateUserData(userId, 'phone', phone)
+            updateUserData(userId, 'address', address)
+        }
         Alert.alert("You data saved")
     }
 
@@ -34,8 +41,8 @@ const EditProfile = () => {
         <Container>
             <FormWrapper>
                 <TITLE>EDIT DATA</TITLE>
-                <Input name={phone ? phone : 'Enter your phone'} value={phone} onChange={setPhone} />
-                <Input name={address ? address : 'Enter your address'} value={address} onChange={setAddress} />
+                <Input placeholder={phone ? phone : 'Enter your phone'} value={phone} onChange={setPhone} error={false} />
+                <Input placeholder={address ? address : 'Enter your address'} value={address} onChange={setAddress} error={false} />
                 <Button label={'Save data'} onPress={saveUserData} />
             </FormWrapper>
         </Container>

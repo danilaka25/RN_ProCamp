@@ -11,17 +11,31 @@ import { GetAnimeList } from './graphql';
 import AnimeCard from '../../components/core/AnimeCard';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
+
+type AnimeItem = {
+     
+        id: string
+        title: {
+            romaji: string
+        }
+  
+}
+
+type AnimeList = AnimeItem[]
+
+// interface AnimeList {
+//     'Object': AnimeItem;
+//   }
 
 
 const AnimeSwiperScreen = () => {
 
-    const [anime, setAnime] = useState();
+    const [anime, setAnime] = useState<AnimeList>();
     const [variables, setVariables] = useState({ page: 1, perPage: 10 });
     const { data, loading, error } = useQuery(GetAnimeList, { variables })
-    const ref: RefObject<Flatlist> = useRef(null)
+    const ref: React.RefObject<FlatList> = useRef(null)
     const userId = useAppSelector(state => state.auth.fireBaseToken);
 
     const prevPage = usePreviousState(variables.page)
@@ -29,17 +43,24 @@ const AnimeSwiperScreen = () => {
 
     const getLastSeenPage = () => {
 
-        store.collection("users").doc(userId).get().then((doc) => {
-            let requestParams = { ...variables }
-            if (doc.exists) {
-                requestParams.page = doc.data().lastSeenPage
-                setVariables({ ...requestParams })
-            } else {
-                requestParams.page = 1
-                setVariables({ ...requestParams })
-            }
+        if (userId !== null) {
 
-        })
+            store.collection("users").doc(userId).get().then((doc) => {
+                let requestParams = { ...variables }
+
+                if (doc.exists && doc?.data() !== undefined) {
+                    requestParams.page = doc?.data()?.lastSeenPage
+                    setVariables({ ...requestParams })
+
+                } else {
+                    requestParams.page = 1
+                    setVariables({ ...requestParams })
+                }
+
+            })
+
+        }
+
 
     }
 
@@ -62,9 +83,10 @@ const AnimeSwiperScreen = () => {
             );
         }
 
-        if (data) {
+        if (data && userId) {
 
             //console.log("data page", variables.page, prevPage)
+            console.log("data anime", anime)
 
             if (variables.page !== prevPage && typeof (prevPage) == 'number') { // need to refactor
 
@@ -91,9 +113,10 @@ const AnimeSwiperScreen = () => {
         }
     }
 
-    useEffect(() => {
-        fetch()
-    }, []);
+    // useEffect(() => {
+    //     getLastSeenPage()
+    //     fetch()
+    // }, []);
 
     useEffect(() => {
         getLastSeenPage()

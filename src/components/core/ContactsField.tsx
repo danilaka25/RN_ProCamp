@@ -3,10 +3,11 @@ import { StyleSheet } from 'react-native';
 import { View , Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
  
+type IconNames =  typeof Ionicons.defaultProps
 
 interface Props {
-  icon: String;
-  text: String;
+  icon: IconNames;
+  text: string;
 }
 
 const ContactsField = ({...props }: Props) => (
@@ -30,8 +31,6 @@ const styles = StyleSheet.create({
   fieldIcon: {
     marginRight: 10
   }
-
- 
 });
 
 export default ContactsField;

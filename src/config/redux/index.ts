@@ -4,7 +4,7 @@ import profileReducer from '../../modules/profile/redux';
 import authReducer from '../../redux/auth'
 
 const rootReducer = combineReducers({
-  chat: chatReducer,
+  //chat: chatReducer,
   user: profileReducer,
   auth: authReducer
 });
