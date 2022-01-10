@@ -68,6 +68,7 @@ export default function LoginScreen() {
     email == '' ? setEmailError(true) : setEmailError(false)
     password == '' ? setPasswordError(true) : setPasswordError(false)
 
+ 
   };
 
   const createAccount = () => {
