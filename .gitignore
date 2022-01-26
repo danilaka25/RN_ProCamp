@@ -10,6 +10,7 @@ npm-debug.*
 web-build/
 .env
 yarn.lock
+yarn-error.log
 .gitignore
 package.json
 
