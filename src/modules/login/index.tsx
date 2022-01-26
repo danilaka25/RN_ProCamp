@@ -1,5 +1,6 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React, { useState } from "react";
+ 
 import { Alert, StyleSheet, SafeAreaView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import Routes from '../../config/navigation/routes';
@@ -28,8 +29,6 @@ export default function LoginScreen() {
     displayName: string | undefined,
     email: string | undefined,
   }
-
-
 
 
   const Login = async () => {

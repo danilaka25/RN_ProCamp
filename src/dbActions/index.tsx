@@ -1,4 +1,6 @@
 import { firebase, store } from '../config/firebase';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
 
 interface iAnimeItem {
   item: {

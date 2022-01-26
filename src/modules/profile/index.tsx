@@ -38,10 +38,6 @@ const ProfileScreen = () => {
 
   }, []);
 
-  useEffect(() => {
-
-  }, [likes])
-
  
 
   const countLikes = (userId: string) => {
@@ -83,7 +79,7 @@ const ProfileScreen = () => {
     isLoading ? <ActivityIndicator /> :
    
       <SafeAreaView style={styles.container}>
-  {console.log('RENDER')}
+        {console.log('RENDER')}
         <View style={styles.profileHeader}>
           <Pressable style={styles.logOut} onPress={logOut}>
             <Ionicons name="log-out-outline" size={30} color="#fff" />

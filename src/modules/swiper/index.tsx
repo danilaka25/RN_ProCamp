@@ -25,9 +25,7 @@ type AnimeItem = {
 
 type AnimeList = AnimeItem[]
 
-// interface AnimeList {
-//     'Object': AnimeItem;
-//   }
+ 
 
 
 const AnimeSwiperScreen = () => {
@@ -86,11 +84,11 @@ const AnimeSwiperScreen = () => {
         if (data && userId) {
 
             //console.log("data page", variables.page, prevPage)
-            console.log("data anime", anime)
+            //console.log("data anime", anime)
 
             if (variables.page !== prevPage && typeof (prevPage) == 'number') { // need to refactor
 
-                console.log("fetch 1")
+                //console.log("fetch 1")
 
                 let newAnimeAdded = [...anime, ...data.Page.media]
 
@@ -104,7 +102,7 @@ const AnimeSwiperScreen = () => {
 
             } else {
 
-                console.log("fetch 2")
+                //console.log("fetch 2")
 
                 setAnime(data.Page.media);
 
