@@ -26,7 +26,7 @@ type test = {
 
  
 
-//if (Constants !== null && Constants !== undefined) {
+if (Constants !== null && Constants !== undefined) {
   let firebaseConfig = {
     apiKey: Constants.manifest.extra.apiKey,
     authDomain: Constants.manifest.extra.authDomain,
@@ -36,7 +36,7 @@ type test = {
     appId: Constants.manifest.extra.appId,
     databaseURL: Constants.manifest.extra.databaseURL,
   }
-//}
+}
 
 let Firebase
 
